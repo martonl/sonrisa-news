@@ -12,3 +12,5 @@ Remove Phase 7
 6. Switch AuthController to minimal API. Move endpoints to minimal api endpoints. Delete AuthController.cs
 
 7. extract each record to its own file
+
+8. use c# primary constructors where possible
