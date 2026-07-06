@@ -4,3 +4,5 @@
 Remove Phase 7
 
 3. Amend the plan. Development phases should contains writing exact tests. API endpoint tests for Phase 2 and 3. Integration tests for Phase 4 and 5. Check removed Phase 7 for more details.
+
+4. Do Phase 1-2 and Test Phase 2

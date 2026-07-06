@@ -1,0 +1,35 @@
+using Microsoft.EntityFrameworkCore;
+using NewsApp.Infrastructure.Data;
+using NewsApp.Modules.Identity;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Modules
+builder.Services.AddIdentityModule(builder.Configuration);
+
+// API
+builder.Services.AddControllers();
+builder.Services.AddOpenApi();
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
+
+await app.SeedAdminAsync();
+
+app.Run();
+
+// Required so WebApplicationFactory<Program> can find this class in tests
+public partial class Program { }
