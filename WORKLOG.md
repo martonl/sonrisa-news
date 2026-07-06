@@ -422,3 +422,148 @@ Here's what was delivered:
 **One notable decision:** Swashbuckle was dropped because `Swashbuckle.AspNetCore` 10.x uses `Microsoft.OpenApi` 2.0 which reorganised the Models namespace. The app now uses the built-in `AddOpenApi()` / `MapOpenApi()` (OpenAPI spec served at `/openapi/v1.json` in Development).
 
 Made changes.
+
+
+
+User: remove unused tests\NewsApp.Tests\UnitTest1.cs
+
+GitHub Copilot: I’m checking the repo notes first, then I’ll delete the unused test file and do a quick validation that the workspace no longer references it.
+
+Searched for files matching `**/UnitTest1.cs`, 1 match
+
+Read memory
+
+The file exists only at the expected test path, so I’m removing it directly now. After that I’ll confirm it’s gone from the workspace.
+
+Generating patch (3 lines) in [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/UnitTest1.cs)
+
+Checked , no problems found
+
+Searched for files matching `**/UnitTest1.cs`, no matches
+
+Removed the unused placeholder test file from the test project. The workspace now has no remaining UnitTest1.cs, and the test project still reports no errors.
+
+
+
+User: Switch AuthController to minimal API. Move endpoints to minimal api endpoints. Delete AuthController.cs
+
+GitHub Copilot: I’m locating the current auth wiring in the API and the controller implementation so I can move the routes without changing behavior.
+
+Searched for regex `AuthController|MapGroup|MapPost|MapGet|UseAuthentication|UseAuthorization` (`**/src/NewsApp/**/*.cs`), 4 results
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/AuthController.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+I’ve confirmed the controller currently owns three auth routes and that the app is still mapping controllers globally. Next I’m checking the identity module and tests so I can move the endpoints into the existing module shape and keep the test surface intact.
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/ApiTests/AuthApiTests.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/JwtTokenService.cs)
+
+I’ve got the full auth flow now: tests hit three HTTP routes, token generation stays in the module, and MVC is only being used for this controller. I’m checking whether the request/response records are referenced anywhere else so I can keep the move self-contained and then I’ll patch the module plus Program.cs.
+
+Searched for regex `RegisterRequest|LoginRequest|AuthResponse|UserResponse` (`**/src/**/*.cs`), 9 results
+
+Searched for regex `AddControllers\(|MapControllers\(` (`**/src/**/*.cs`), 2 results
+
+Searched for files matching `**/src/NewsApp/Modules/Identity/*.cs`, 4 matches
+
+I’ve narrowed it to a single module change: move the three handlers into route mappings, keep the existing DTOs, and strip MVC registration from startup. I’m applying that now and then I’ll run a focused compile/error check on the touched area.
+
+Generating patch (106 lines) in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs), [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs), [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/AuthController.cs)
+
+
+```
+
+```
+
+```
+
+```
+
+
+Checked [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs), [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs), no problems found
+
+Searched for files matching `**/AuthController.cs`, no matches
+
+The code compiles cleanly in the touched files and the controller file is gone. I’m running the auth API tests next to verify the route move didn’t change the external behavior.
+
+0/6 tests passed (0.00%)
+
+The test run produced a full result file instead of inline output, so I’m reading that now to confirm whether the endpoints pass under the new minimal API wiring.
+
+Read [](file:///c%3A/Users/lajos/AppData/Roaming/Code/User/workspaceStorage/e292ba3b5f8814fb098f9814247740a4/GitHub.copilot-chat/chat-session-resources/3b0186f2-03d7-446f-89e3-44f6b9ad5171/call_TCrqWgGz18JWjF7n7DFOCmfZ__vscode-1783371434105/content.txt)
+
+The endpoint move is fine; the failure is from startup missing `AddAuthorization`, which the controller setup had masked. I’m adding that service registration and rerunning the same auth test slice.
+
+Generating patch (7 lines) in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+
+```
+
+```
+
+
+6/6 tests passed (100%)
+
+The auth test slice is green after the authorization registration fix. I’m grabbing the final line positions so I can point you to the exact startup and endpoint locations I changed.
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs)
+
+AuthController was replaced with minimal API route mappings in IdentityModule.cs, and startup now registers authorization plus maps those endpoints from Program.cs. The controller file was deleted.
+
+I validated the change with the auth API test slice, and all 6 tests passed.
+
+Made changes.
+
+User: extract each record to its own file
+
+GitHub Copilot: I’m splitting the DTO records into separate files and checking for any references that need to follow them so the move stays behavior-neutral.
+
+Searched for regex `RegisterRequest|LoginRequest|AuthResponse|UserResponse` (`sonrisa-news` · `**/*.cs`), 13 results
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs)
+
+I’ve confirmed the records are only defined in the module and consumed by the auth tests, so this is a straight extraction. I’m moving the records into four dedicated files now and then I’ll run a focused validation on the identity module/tests.
+
+Generating patch (26 lines) in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs), [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/RegisterRequest.cs), [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/LoginRequest.cs), [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/AuthResponse.cs), [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/UserResponse.cs)
+
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+
+6/6 tests passed (100%)
+
+Extracted the four auth DTO records into separate files under Identity:
+
+- RegisterRequest.cs
+- LoginRequest.cs
+- AuthResponse.cs
+- UserResponse.cs
+
+I removed the inline record declarations from IdentityModule.cs. The auth API test slice still passes: 6 tests, 0 failed.
+
+Made changes.

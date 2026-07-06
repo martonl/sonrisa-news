@@ -4,7 +4,6 @@ using NewsApp.Modules.Identity;
 
 namespace NewsApp.Infrastructure.Data;
 
-public class AppDbContext : IdentityDbContext<ApplicationUser>
+public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<ApplicationUser>(options)
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 }

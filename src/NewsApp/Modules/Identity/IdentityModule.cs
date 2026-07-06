@@ -1,5 +1,7 @@
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using NewsApp.Infrastructure.Data;
@@ -51,6 +53,58 @@ public static class IdentityModule
         services.AddScoped<JwtTokenService>();
 
         return services;
+    }
+
+    public static IEndpointRouteBuilder MapIdentityEndpoints(this IEndpointRouteBuilder app)
+    {
+        var authGroup = app.MapGroup("/api/auth");
+
+        authGroup.MapPost("/register", async (
+            RegisterRequest request,
+            UserManager<ApplicationUser> userManager,
+            JwtTokenService jwtTokenService) =>
+        {
+            var user = new ApplicationUser { UserName = request.Email, Email = request.Email };
+            var result = await userManager.CreateAsync(user, request.Password);
+
+            if (!result.Succeeded)
+                return Results.BadRequest(result.Errors);
+
+            var roles = await userManager.GetRolesAsync(user);
+            return Results.Ok(new AuthResponse(jwtTokenService.GenerateToken(user, roles)));
+        });
+
+        authGroup.MapPost("/login", async (
+            LoginRequest request,
+            UserManager<ApplicationUser> userManager,
+            JwtTokenService jwtTokenService) =>
+        {
+            var user = await userManager.FindByEmailAsync(request.Email);
+            if (user is null || !await userManager.CheckPasswordAsync(user, request.Password))
+                return Results.Unauthorized();
+
+            var roles = await userManager.GetRolesAsync(user);
+            return Results.Ok(new AuthResponse(jwtTokenService.GenerateToken(user, roles)));
+        });
+
+        authGroup.MapGet("/me", async (
+            ClaimsPrincipal user,
+            UserManager<ApplicationUser> userManager) =>
+        {
+            var userId = user.FindFirstValue("sub");
+            if (userId is null)
+                return Results.Unauthorized();
+
+            var applicationUser = await userManager.FindByIdAsync(userId);
+            if (applicationUser is null)
+                return Results.NotFound();
+
+            var roles = await userManager.GetRolesAsync(applicationUser);
+            return Results.Ok(new UserResponse(applicationUser.Id, applicationUser.Email!, roles));
+        })
+        .RequireAuthorization();
+
+        return app;
     }
 
     public static async Task SeedAdminAsync(this WebApplication app)

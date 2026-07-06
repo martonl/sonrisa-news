@@ -2,3 +2,4 @@
 src/NewsApp/bin
 tests/NewsApp.Tests/bin
 tests/NewsApp.Tests/obj
+.vs

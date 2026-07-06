@@ -29,7 +29,7 @@ It provides:
 ## Technical Notes
 - Use modular monolith architecture as MVP based on Asp.Net Core
 - Target framework: .NET 10 (`net10.0`)
-- Asp.Net Core API project: `NewsApp`
+- Asp.Net Core API project: `NewsApp` minimal API
 - Admin site: VueJs project use JWT tokens
 - Data store: SQLite (`news.db`)
 - Auth: Asp.Net Core Identity
@@ -40,3 +40,9 @@ It provides:
 
 ## Overall Interpretation
 A JWT-secured backend with basic user administration and scheduled News evaluating, sending notifications to subscribers.
+
+## Coding standards
+- use latest C#/.Net language features like primary constructors
+- use async where possible
+- every models (records, classes) move into single .cs file
+- use Asp.Net Core minimal APIs

@@ -5,16 +5,9 @@ using NewsApp.Modules.Identity;
 
 namespace NewsApp.Tests.ApiTests;
 
-public class AuthApiTests : IClassFixture<CustomWebApplicationFactory<Program>>
+public class AuthApiTests(CustomWebApplicationFactory<Program> factory) : IClassFixture<CustomWebApplicationFactory<Program>>
 {
-    private readonly CustomWebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-
-    public AuthApiTests(CustomWebApplicationFactory<Program> factory)
-    {
-        _factory = factory;
-        _client = factory.CreateClient();
-    }
+    private readonly HttpClient _client = factory.CreateClient();
 
     [Fact]
     public async Task Register_WithValidCredentials_ReturnsToken()
@@ -100,7 +93,7 @@ public class AuthApiTests : IClassFixture<CustomWebApplicationFactory<Program>>
     public async Task Me_WithoutToken_ReturnsUnauthorized()
     {
         // Create a fresh client through the factory so it routes through the test server
-        using var anonClient = _factory.CreateClient();
+        using var anonClient = factory.CreateClient();
         var response = await anonClient.GetAsync("/api/auth/me");
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);

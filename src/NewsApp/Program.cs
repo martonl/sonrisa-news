@@ -12,7 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddIdentityModule(builder.Configuration);
 
 // API
-builder.Services.AddControllers();
+builder.Services.AddAuthorization();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -25,7 +25,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+app.MapIdentityEndpoints();
 
 await app.SeedAdminAsync();
 
