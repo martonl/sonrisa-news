@@ -1,0 +1,6 @@
+1. Create a plan for reaching the final application
+
+2. Modify plan. Add Test Phase after Phase 2, Phase 3, Phase 4 and Phase 5. Run these tests at the end of each test phases.
+Remove Phase 7
+
+3. Amend the plan. Development phases should contains writing exact tests. API endpoint tests for Phase 2 and 3. Integration tests for Phase 4 and 5. Check removed Phase 7 for more details.

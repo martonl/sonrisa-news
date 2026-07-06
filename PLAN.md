@@ -28,6 +28,16 @@ A JWT-secured .NET 10 modular monolith (`NewsApp`) with a Vue 3 admin SPA, an AI
    - `POST /api/auth/login` → returns token
    - `GET /api/auth/me` [Authorize]
 4. Startup seed: create `Admin` role + first admin user from config
+5. Write `AuthApiTests` for register, login, and me
+
+---
+
+### Test Phase 2 — Identity & Auth Validation
+Run these tests at the end of Phase 2 before starting Phase 3.
+
+1. `dotnet build`
+2. `dotnet test` focusing on `AuthApiTests` for register, login, and me
+3. `dotnet run` in `src/NewsApp` and verify `/api/auth/register`, `/api/auth/login`, and `/api/auth/me` through Swagger or a REST client
 
 ---
 
@@ -40,6 +50,16 @@ A JWT-secured .NET 10 modular monolith (`NewsApp`) with a Vue 3 admin SPA, an AI
 4. Admin endpoints [Authorize(Roles="Admin")]:
    - `GET /api/admin/users` — paginated
    - `GET|POST|PUT|DELETE /api/admin/users/{id}/subscriptions`
+5. Write `SubscriptionApiTests` and `AdminApiTests` for testing admin end suscription endpoints
+
+---
+
+### Test Phase 3 — Subscriptions Validation
+Run these tests at the end of Phase 3 before starting Phase 4.
+
+1. `dotnet build`
+2. `dotnet test` focusing on `SubscriptionApiTests` and `AdminApiTests`
+3. `dotnet ef migrations add InitialCreate` to confirm the combined Identity and Subscription model is valid
 
 ---
 
@@ -54,6 +74,15 @@ A JWT-secured .NET 10 modular monolith (`NewsApp`) with a Vue 3 admin SPA, an AI
 
 ---
 
+### Test Phase 4 — Notification Validation
+Run these tests at the end of Phase 4 before starting Phase 5.
+
+1. `dotnet build`
+2. `dotnet test` focusing on notification integration coverage for queue consumption and sender dispatch
+3. Verify the notification worker can consume queued `NewsNotification` items in a local run
+
+---
+
 ### Phase 5 — News Evaluator AI Agent (`Modules/NewsEvaluator/`)
 *(depends on Phase 4 for INewsQueue; parallel with Phase 4 setup)*
 
@@ -62,6 +91,15 @@ A JWT-secured .NET 10 modular monolith (`NewsApp`) with a Vue 3 admin SPA, an AI
 3. `NewsEvaluatorAgent` — wraps `OpenAIClient → GetResponsesClient() → AsAIAgent(model, systemPrompt)`, sends RSS batch, parses JSON response into `IEnumerable<NewsNotification>`
 4. `NewsSchedulerService : BackgroundService` — timed loop using `NewsEvaluator:IntervalMinutes`, filters items by `LastRunAt`, calls agent, enqueues results, persists updated state
 5. `POST /api/admin/agent/run` [Authorize(Roles="Admin")] — manual trigger endpoint
+
+---
+
+### Test Phase 5 — News Evaluator Validation
+Run these tests at the end of Phase 5 before starting Phase 6.
+
+1. `dotnet build`
+2. `dotnet test` focusing on `NewsSchedulerServiceTests` for `LastRunAt` filtering, queue publication, and DB state updates
+3. Verify the scheduler updates `AgentRunState` and publishes notifications into the queue
 
 ---
 
@@ -75,16 +113,6 @@ A JWT-secured .NET 10 modular monolith (`NewsApp`) with a Vue 3 admin SPA, an AI
 5. Axios interceptor for `Authorization: Bearer` header
 6. Views: `LoginView`, `UsersView`, `SubscriptionsView`, `DashboardView` (with agent trigger button)
 7. `router.beforeEach` guard redirecting unauthenticated to `/login`
-
----
-
-### Phase 7 — Tests (`tests/NewsApp.Tests/`)
-*(depends on all previous phases; can be built incrementally)*
-
-1. `CustomWebApplicationFactory<Program>` — in-memory SQLite, stub senders, stub OpenAI agent
-2. `TestJwtHelper` — creates valid test JWTs
-3. **API tests**: `AuthApiTests` (register, login, me), `SubscriptionApiTests` (CRUD + ownership), `AdminApiTests` (user list, agent trigger)
-4. **AI agent integration tests**: `NewsSchedulerServiceTests` — verify `LastRunAt` filtering, queue publication, DB state update using mock `IRssFeedService` + stub `INewsEvaluatorAgent`
 
 ---
 
