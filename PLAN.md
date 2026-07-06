@@ -71,6 +71,7 @@ Run these tests at the end of Phase 3 before starting Phase 4.
 3. `NewsChannel` — `System.Threading.Channels.Channel<NewsNotification>` singleton
 4. `IEmailSender` / `ISlackSender` interfaces + `StubEmailSender` / `StubSlackSender` (log via ILogger)
 5. `NotificationWorker : BackgroundService` — consumes queue, resolves active subscriptions, dispatches by type
+6. Write Integration tests for verify the notification worker can consume queued `NewsNotification` items
 
 ---
 
@@ -91,6 +92,7 @@ Run these tests at the end of Phase 4 before starting Phase 5.
 3. `NewsEvaluatorAgent` — wraps `OpenAIClient → GetResponsesClient() → AsAIAgent(model, systemPrompt)`, sends RSS batch, parses JSON response into `IEnumerable<NewsNotification>`
 4. `NewsSchedulerService : BackgroundService` — timed loop using `NewsEvaluator:IntervalMinutes`, filters items by `LastRunAt`, calls agent, enqueues results, persists updated state
 5. `POST /api/admin/agent/run` [Authorize(Roles="Admin")] — manual trigger endpoint
+6. Write Integration tests `NewsSchedulerServiceTests` — verify `LastRunAt` filtering, queue publication, DB state update using mock `IRssFeedService` + stub `INewsEvaluatorAgent`
 
 ---
 
