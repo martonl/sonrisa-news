@@ -18,3 +18,6 @@ I made some code styling decisions. I extended Agents.md and ran some code clean
 
 
 I chose BBC news RSS feed as it seems the most major feed worldwide. https://feeds.bbci.co.uk/news/rss.xml
+
+
+For Admin frontend dashboard I slightly changed plan for phase 6. Keep it as simple as possible. I also changed Claude Opus 4.6 to GPT-5.4 mini as I ran out of my github copilot tokens and I have to use additional budget.

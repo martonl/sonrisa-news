@@ -1228,3 +1228,175 @@ All 34 tests pass (27 existing + 7 new). Here's what was implemented:
 - `/api/admin/agent/run` requires Admin role (403 for regular user)
 
 Made changes.
+
+
+
+User: implement phase 6
+
+GitHub Copilot: I’m checking the phase 6 scope in the plan and the nearest code paths it touches so I can make the smallest grounded change set first.
+
+Read [](file:///d%3A/work/sonrisa-news/PLAN.md)
+
+Searched for regex `phase 6|Phase 6|6\.` (`**/PLAN.md`), 6 results
+
+I’ve got the phase 6 requirements. Next I’m confirming the backend route shapes and whether a NewsAdmin app already exists so I can wire the Vue side against the actual API instead of guessing.
+
+Searched for files matching `**/NewsAdmin/**`, no matches
+
+Searched for regex `MapGet\(|MapPost\(|/api/auth|/api/admin|/api/subscriptions|/api/users|/api/agent` (`**/src/NewsApp/**/*.cs`), 14 results
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionsModule.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsEvaluatorModule.cs)
+
+The backend routes are straightforward, and there’s no NewsAdmin app yet. I’m switching from discovery to a small scaffold: a self-contained Vue 3/Vite frontend that talks to the existing `/api/auth`, `/api/subscriptions`, `/api/admin/users`, and `/api/admin/agent/run` endpoints.
+
+Searched for files matching `**/package.json`, no matches
+
+Read [](file:///d%3A/work/sonrisa-news/SonrisaNews.slnx)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/Subscription.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionType.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/AuthResponse.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/UserResponse.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/PagedResult.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/CreateSubscriptionRequest.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionResponse.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/AdminUserResponse.cs)
+
+I’ve confirmed the backend contracts, including the user/admin subscription shapes and the admin agent trigger. I’m checking the API host/port next so the Vite proxy points at the right place, then I’ll add the frontend scaffold.
+
+Searched for regex `localhost:5000|applicationUrl|ASPNETCORE_URLS` (`**/src/NewsApp/**/*.json`), 2 results
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Properties/launchSettings.json)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/NewsApp.csproj)
+
+I have the contract now. I’m switching to implementation with a small task list: scaffold the Vue app, wire auth and routing, then validate the frontend build if Node is available.
+
+Created 5 todos
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsAdmin)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/api)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/router)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/stores)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/views)
+
+I have enough local context to write the frontend now. I’m adding the full Vue scaffold in one pass, then I’ll immediately run the smallest build check that can falsify it.
+
+Apply Patch
+
+The first patch attempt was rejected on tool formatting, not content. I’m resubmitting the same scaffold with the required patch metadata so I can move straight into validation.
+
+Generating patch (1308 lines) in [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/package.json), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/index.html), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/vite.config.js), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/main.js), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/App.vue), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/router/index.js), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/stores/authStore.js), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/api/http.js), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/api/newsApi.js), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/views/LoginView.vue), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/views/DashboardView.vue), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/views/SubscriptionsView.vue), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/views/UsersView.vue), [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/style.css)
+
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+The frontend scaffold is in place. I’m running dependency install and a build in the new app folder now to catch missing imports, router issues, or Vue compile errors before I touch anything else.
+
+Ran terminal command: Set-Location 'd:\work\sonrisa-news\src\NewsAdmin'; npm install
+
+Ran terminal command: Set-Location 'd:\work\sonrisa-news\src\NewsAdmin'; npm run build
+Completed with input: Set-Location 'd:\work\sonrisa-news\src\NewsAdmin'; npm run build
+
+The first build check found a single concrete issue: `main.js` uses top-level `await`, which Vite’s default browser target rejects. I’m switching startup to an async bootstrap function and rerunning the same build immediately.
+
+Generating patch (19 lines) in [](file:///d%3A/work/sonrisa-news/src/NewsAdmin/src/main.js)
+
+
+```
+
+```
+
+
+Ran terminal command: Set-Location 'd:\work\sonrisa-news\src\NewsAdmin'; npm run build
+
+The build is green now. I’m doing a quick cleanup pass on task state and recording the one repo-specific detail worth remembering: the frontend proxy targets the backend’s current `http://localhost:5196` dev URL unless overridden.
+
+Completed: *Scaffold Vue admin app* (1/5)
+
+Read memory
+
+Created memory file [](file:///c%3A/Users/lajos/AppData/Roaming/Code/User/workspaceStorage/e292ba3b5f8814fb098f9814247740a4/GitHub.copilot-chat/memory-tool/memories/repo/sonrisa-news.md)
+
+I’ve finished the implementation and validation. I’m checking the final file set so I can report exactly what changed and call out the one deliberate deviation from the plan: the proxy follows the backend’s actual dev port.
+
+Ran terminal command: Set-Location 'd:\work\sonrisa-news'; git status --short
+
+Implemented the Vue admin site in src/NewsAdmin. It now has a Vite/Vue 3 scaffold, JWT auth persisted in localStorage, a fetch-based API layer, router guards for auth and admin-only routes, and the four requested views: login, dashboard, users, and subscriptions. The dashboard includes the admin agent trigger, and the users view supports paginated user browsing plus per-user subscription management.
+
+Validation passed: npm install and npm run build both succeeded in the new frontend folder. The Vite proxy defaults to the backend’s current dev URL on port 5196 and can be overridden with VITE_API_TARGET if you want to point it somewhere else.
+
+1. If you want, I can hardwire the proxy to 5000 instead of following the current backend launch port.
+2. I can also add a root-level script or workspace task to run the frontend and backend together.
+
+Made changes.

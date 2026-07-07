@@ -109,11 +109,11 @@ Run these tests at the end of Phase 5 before starting Phase 6.
 *(depends on Phases 3 & 5 for the API; can start in parallel)*
 
 1. `npm create vite@latest NewsAdmin -- --template vue` in `src/`
-2. Install `vue-router@4`, `pinia`, `axios`
+2. Install `vue-router@4`, don't use external libraries as possible. Use standard fetch and vue.js state handling as store management
 3. Vite proxy in `vite.config.js`: `/api` → `http://localhost:5000`
-4. `authStore` (Pinia) with JWT persistence in localStorage
-5. Axios interceptor for `Authorization: Bearer` header
-6. Views: `LoginView`, `UsersView`, `SubscriptionsView`, `DashboardView` (with agent trigger button)
+4. `authStore` (vue.js standard reactive component) with JWT persistence in localStorage
+5. Use this http header for each fetch calls `Authorization: Bearer jwttoken` header
+6. Views: `LoginView` (anonymous), `UsersView` (only for admins), `SubscriptionsView` (both users and admins), `DashboardView` (both users and admins, with agent trigger button only for admins)
 7. `router.beforeEach` guard redirecting unauthenticated to `/login`
 
 ---
