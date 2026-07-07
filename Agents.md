@@ -42,7 +42,7 @@ It provides:
 A JWT-secured backend with basic user administration and scheduled News evaluating, sending notifications to subscribers.
 
 ## Coding standards
-- use latest C#/.Net language features like primary constructors
+- use latest C#/.Net language features like primary constructors, .Net channels etc.
 - use async where possible
 - every models (records, classes) move into single .cs file
 - use Asp.Net Core minimal APIs

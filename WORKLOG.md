@@ -755,3 +755,173 @@ All 21 tests still pass. Here's what was extracted into Subscriptions:
 The Identity module records (`AuthResponse`, `LoginRequest`, `RegisterRequest`, `UserResponse`) were already in their own files.
 
 Made changes.
+
+
+
+User: implement phase 4 and Test Phase 4
+
+GitHub Copilot: Read [](file:///d%3A/work/sonrisa-news/PLAN.md#1-1), lines 1 to 150
+
+Read [](file:///d%3A/work/sonrisa-news/PLAN.md#150-150), lines 150 to 200
+
+Now let me understand the existing code structure:   
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/NewsApp.csproj)
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/NewsApp.Tests.csproj)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionsModule.cs#1-1), lines 1 to 60
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Infrastructure/Data/AppDbContext.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/CustomWebApplicationFactory.cs#1-1), lines 1 to 60
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/TestJwtHelper.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/ApiTests/AuthApiTests.cs#1-1), lines 1 to 80
+
+Let me read more of the existing code before implementing:  
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs#1-1), lines 1 to 80
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/Subscription.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/CustomWebApplicationFactory.cs#55-55), lines 55 to 66
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionType.cs)
+
+Searched for text `SeedAdminAsync`, 7 results
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs#105-105), lines 105 to 150
+
+Now I have all the context needed. Let me implement Phase 4. 
+
+Created 6 todos
+
+Starting: *Create NewsNotification, INewsQueue, NewsChannel* (1/6)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/NewsNotification.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/INewsQueue.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/NewsChannel.cs)
+
+Starting: *Create IEmailSender/ISlackSender + Stubs* (2/6)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/Senders/IEmailSender.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/Senders/ISlackSender.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/Senders/StubEmailSender.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/Senders/StubSlackSender.cs)
+
+Starting: *Create NotificationWorker + NotificationsModule* (3/6)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/NotificationWorker.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/NotificationsModule.cs)
+
+Starting: *Wire NotificationsModule into Program.cs* (4/6)
+
+Replacing 4 lines with 5 lines in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+
+```
+
+```
+
+
+Replacing 2 lines with 3 lines in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+
+```
+
+```
+
+
+Starting: *Create NotificationWorkerTests* (5/6)
+
+Now create the test file with recording fakes and integration tests: 
+
+Created [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/NotificationTests/NotificationWorkerTests.cs)
+
+Starting: *Build and run tests* (6/6)
+
+Ran terminal command: dotnet build --no-restore 2>&1 | Select-Object -Last 20
+
+Build succeeds. Now run the tests: 
+
+Discovering tests...
+
+Ran terminal command: dotnet test tests/NewsApp.Tests --filter "FullyQualifiedName~NotificationTests" --no-build -v normal 2>&1
+Completed with input: dotnet test tests/NewsApp.Tests --filter "FullyQualifiedName~NotificationTests" --no-build -v normal 2>&1
+
+Read [](file:///c%3A/Users/lajos/AppData/Roaming/Code/User/workspaceStorage/e292ba3b5f8814fb098f9814247740a4/GitHub.copilot-chat/chat-session-resources/53eab0fd-40e2-41f4-98ba-19cdf28c9db6/toolu_bdrk_01W8eVoZUoYJAcnBt9jSgSay__vscode-1783403798849/content.txt#1-1), lines 1 to 80
+
+The FK constraint fails because `Subscription.UserId` references `AspNetUsers`. I need to create a real user before seeding subscriptions: 
+
+Replacing 7 lines with 9 lines in [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/NotificationTests/NotificationWorkerTests.cs)
+
+
+```
+
+```
+
+
+Replacing 20 lines with 35 lines in [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/NotificationTests/NotificationWorkerTests.cs)
+
+
+```
+
+```
+
+
+Ran terminal command: dotnet test tests/NewsApp.Tests --filter "FullyQualifiedName~NotificationTests" --no-build -v normal 2>&1 | Select-String -Pattern "(passed|failed|error|FAILED|PASSED|Skipped|xUnit)" | Select-Object -Last 30
+Completed with input: dotnet test tests/NewsApp.Tests --filter "FullyQualifiedName~NotificationTests" --no-build -v normal 2>&1 | Select-String -Pattern "(passed|failed|error|FAILED|PASSED|Skipped|xUnit)" | Select-Object -Last 30
+
+The FK error persists. The issue is that user creation and subscription insertion use separate DbContext scopes — I need to consolidate them into one scope where UserManager and DbContext share the same instance: 
+
+Replacing 35 lines with 33 lines in [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/NotificationTests/NotificationWorkerTests.cs)
+
+
+```
+
+```
+Also remove the now-unused `using Microsoft.AspNetCore.Identity` import if it was added for the separate helper — but it's still needed for `UserManager<ApplicationUser>`. Now run tests again: 
+
+Ran terminal command: dotnet test tests/NewsApp.Tests --filter "FullyQualifiedName~NotificationTests" --no-build 2>&1 | Select-String -Pattern "(Passed|Failed|Error|passed|failed)" | Select-Object -Last 15
+Completed with input: dotnet test tests/NewsApp.Tests --filter "FullyQualifiedName~NotificationTests" --no-build 2>&1 | Select-String -Pattern "(Passed|Failed|Error|passed|failed)" | Select-Object -Last 15
+
+The tests ran with the old compiled binary (I used `--no-build`). Let me rebuild first: 
+
+Ran terminal command: dotnet test tests/NewsApp.Tests --filter "FullyQualifiedName~NotificationTests" 2>&1 | Select-String -Pattern "(Passed|Failed|passed|failed|Error Message)" | Select-Object -Last 15
+
+All 6 tests pass. Now run the full test suite to confirm nothing broke:  
+
+Ran terminal command: dotnet test tests/NewsApp.Tests 2>&1 | Select-String -Pattern "(Passed|Failed|passed|failed)" | Select-Object -Last 5
+
+Completed: *Build and run tests* (6/6)
+
+All 27 tests pass (21 existing + 6 new). Here's what was implemented:
+
+**Phase 4 — Notifications module** (Notifications):
+- NewsNotification.cs — `record` with `Title`, `Summary`, `Url`, `PublishedAt`
+- INewsQueue.cs — `EnqueueAsync` / `ReadAllAsync` interface
+- NewsChannel.cs — `Channel<NewsNotification>` singleton implementation
+- Senders/IEmailSender.cs + StubEmailSender.cs — logs via `ILogger`
+- Senders/ISlackSender.cs + StubSlackSender.cs — logs via `ILogger`
+- NotificationWorker.cs — `BackgroundService` consuming the queue, scoping `AppDbContext` per notification, dispatching by `SubscriptionType`
+- NotificationsModule.cs — registers all services + hosted worker
+
+**Test Phase 4** (NotificationWorkerTests.cs) — 6 tests:
+- Email subscription dispatches to `IEmailSender`
+- Slack subscription dispatches to `ISlackSender`
+- Inactive subscriptions are skipped
+- Mixed subscriptions dispatch to both senders
+- `NewsChannel` enqueue/read single item
+- `NewsChannel` preserves enqueue order for multiple items
+
+Made changes.

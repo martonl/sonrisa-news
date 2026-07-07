@@ -19,3 +19,4 @@ Remove Phase 7
 
 10. extract each record, enum to separate files
 
+11. implement phase 4 and Test Phase 4
