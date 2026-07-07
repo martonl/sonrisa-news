@@ -4,4 +4,6 @@ After coding styles, I upgraded plan to following new guides (for example minima
 
 I slightly updated plan Phase 5, as I wanted to give more details to AI, not to burn too much tokens for RSS feed handling, and AI processing
 
-I slightly updated plan Phase 6, as I wanted to use as simple admin screens as possible, no complex state management, no unnecessary 3rd party libraries. I added some missing details about permissions
+I slightly updated plan Phase 6, as I wanted to use as simple admin screens as possible, no complex state management, no unnecessary 3rd party libraries. I added some missing details about permissions.
+
+Finally I tested the whole solution manually through Admin site. I found one bug at subscription creation.

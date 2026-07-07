@@ -1454,3 +1454,77 @@ Validation is partly constrained by the repo state: Program.cs itself is clean, 
 If you want, I can also make the frontend send numeric enum values instead, but the backend fix is the better long-term fit.
 
 Made changes.
+
+
+
+User: run tests and fix the issues
+
+GitHub Copilot: I’m going to run the test suite first to get the current failure surface, then I’ll fix the smallest failing slice and re-run the relevant tests until it’s clean.
+
+Read memory [](file:///c%3A/Users/lajos/AppData/Roaming/Code/User/workspaceStorage/e292ba3b5f8814fb098f9814247740a4/GitHub.copilot-chat/memory-tool/memories/repo/sonrisa-news.md)
+
+Discovering tests...
+
+The test runner didn’t accept the project path, so I’m locating the concrete test files and then I’ll run the failing set directly.
+
+Searched for files matching `sonrisa-news` · `tests/NewsApp.Tests/**/*.cs`, 7 matches
+
+24/34 tests passed (70.6%)
+
+Found test failures
+
+I have the failing test output captured; now I’m pulling the actual error summary to isolate the first breakage instead of guessing.
+
+Read [](file:///c%3A/Users/lajos/AppData/Roaming/Code/User/workspaceStorage/e292ba3b5f8814fb098f9814247740a4/GitHub.copilot-chat/chat-session-resources/e7c03f3d-9c05-4877-a9ac-dd074082bb38/call_DzmAubRimdmltM1cg78l5m3A__vscode-1783403799010/content.txt#1-1), lines 1 to 220
+
+The first concrete failure is consistent across the subscription/admin API tests: the API is returning a `type` value that the client can’t deserialize into the enum in `SubscriptionResponse`. I’m checking the DTO and endpoint shape together so I can correct the contract at the source.
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionResponse.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionsModule.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/ApiTests/SubscriptionApiTests.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/ApiTests/AdminApiTests.cs)
+
+Searched for regex `JsonStringEnumConverter|JsonStringEnumMemberName|JsonSerializerOptions` (`sonrisa-news` · `src/NewsApp/**/*.cs`), 2 results
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionType.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+I’ve confirmed the backend is intentionally serializing enums as strings, but the tests are deserializing with default `System.Net.Http.Json` options that expect numeric enums. Before changing the contract, I’m checking whether the frontend already depends on the string form; if it does, I’ll preserve the API and fix the test-side serializer configuration instead.
+
+Searched for text `SubscriptionType|type` (`sonrisa-news` · `src/NewsAdmin/src/**/*.js`), 4 results
+
+Searched for text `SubscriptionResponse|SubscriptionType` (`sonrisa-news` · `src/NewsApp/**/*.cs`), 7 results
+
+I’m making the minimal contract fix in the shared subscription enum so both the API and the test client agree on the JSON representation without touching each test case individually.
+
+Apply Patch
+
+Generating patch (13 lines) in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Subscriptions/SubscriptionType.cs)
+
+
+```
+
+```
+
+
+15/15 tests passed (100%)
+
+The subscription/admin slice is green now. I’m running the full test set once more to make sure the fix didn’t expose anything adjacent in the other suites.
+
+34/34 tests passed (100%)
+
+The full suite is passing. I’m recording the enum-JSON contract detail in repo memory so the same deserialization mismatch is easier to spot next time.
+
+Inserted into memory file [](file:///c%3A/Users/lajos/AppData/Roaming/Code/User/workspaceStorage/e292ba3b5f8814fb098f9814247740a4/GitHub.copilot-chat/memory-tool/memories/repo/sonrisa-news.md)
+
+Inserted into memory file [](file:///c%3A/Users/lajos/AppData/Roaming/Code/User/workspaceStorage/e292ba3b5f8814fb098f9814247740a4/GitHub.copilot-chat/memory-tool/memories/repo/sonrisa-news.md)
+
+Fixed the JSON enum contract by annotating SubscriptionType so the API’s string form for subscription type can be deserialized by the test client and other consumers without custom options.
+
+Validation: all NewsApp.Tests passed, 34 passed and 0 failed.
+
+Made changes.

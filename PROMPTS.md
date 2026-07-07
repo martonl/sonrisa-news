@@ -27,3 +27,5 @@ Remove Phase 7
 
 14. fix this error when #sym:createSubscription : Microsoft.AspNetCore.Http.BadHttpRequestException: Failed to read parameter "CreateSubscriptionRequest request" from the request body as JSON.
  ---> System.Text.Json.JsonException: The JSON value could not be converted to NewsApp.Modules.Subscriptions.CreateSubscriptionRequest. Path: $.type | LineNumber: 0 | BytePositionInLine: 11.
+
+15. run tests and fix the issues
