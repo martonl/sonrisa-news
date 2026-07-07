@@ -15,3 +15,6 @@ Swashbuckle.AspNetCore 10.x pulled in Microsoft.OpenApi 2.0 which reorganized th
 
 
 I made some code styling decisions. I extended Agents.md and ran some code cleanup, styling prompts.
+
+
+I chose BBC news RSS feed as it seems the most major feed worldwide. https://feeds.bbci.co.uk/news/rss.xml

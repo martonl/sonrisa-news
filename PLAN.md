@@ -87,9 +87,9 @@ Run these tests at the end of Phase 4 before starting Phase 5.
 ### Phase 5 — News Evaluator AI Agent (`Modules/NewsEvaluator/`)
 *(depends on Phase 4 for INewsQueue; parallel with Phase 4 setup)*
 
-1. `RssFeedService` — fetches configured RSS URLs using `SyndicationFeed.Load()`, returns `IEnumerable<RssItem>`
+1. `RssFeedService` — fetches configured RSS URLs using `SyndicationFeed.Load()`, returns `IEnumerable<RssItem>`. Use this feed: https://feeds.bbci.co.uk/news/rss.xml
 2. `AgentRunState` EF entity — single-row table tracking `LastRunAt`
-3. `NewsEvaluatorAgent` — wraps `OpenAIClient → GetResponsesClient() → AsAIAgent(model, systemPrompt)`, sends RSS batch, parses JSON response into `IEnumerable<NewsNotification>`
+3. `NewsEvaluatorAgent` — wraps `OpenAIClient → GetResponsesClient() → AsAIAgent(model, systemPrompt)`, download RSS feed, parse it, filter it with `LastRunAt` then sends remaining batch for AI processing, parses JSON response into `IEnumerable<NewsNotification>`. Use this prompt for getting correct JSON response: Evaluate this news feed. Return maximum 5 most important hard-news stories. Prioritize breaking international news, wars, major geopolitical developments, natural disasters, significant economic/business news, public health, science and technology, and government policy with broad international impact. Exclude sports, entertainment, celebrity, royal/family news, opinion pieces, analysis, explainers, feature stories, human-interest stories, local crime, court hearings, individual criminal cases, and lifestyle content. Return JSON with Title, Summary, Url, and PublishedAt.
 4. `NewsSchedulerService : BackgroundService` — timed loop using `NewsEvaluator:IntervalMinutes`, filters items by `LastRunAt`, calls agent, enqueues results, persists updated state
 5. `POST /api/admin/agent/run` [Authorize(Roles="Admin")] — manual trigger endpoint
 6. Write Integration tests `NewsSchedulerServiceTests` — verify `LastRunAt` filtering, queue publication, DB state update using mock `IRssFeedService` + stub `INewsEvaluatorAgent`

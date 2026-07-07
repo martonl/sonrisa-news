@@ -925,3 +925,306 @@ All 27 tests pass (21 existing + 6 new). Here's what was implemented:
 - `NewsChannel` preserves enqueue order for multiple items
 
 Made changes.
+
+User: 11. implement phase 5 and Test Phase 5
+
+GitHub Copilot: Read [](file:///d%3A/work/sonrisa-news/PLAN.md#88-88), lines 88 to 130
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/appsettings.json)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/NewsNotification.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Infrastructure/Data/AppDbContext.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Identity/IdentityModule.cs#30-30), lines 30 to 55
+
+Read [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/CustomWebApplicationFactory.cs#1-1), lines 1 to 50
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/Notifications/NotificationsModule.cs)
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Migrations/20260707060421_InitialCreate.cs#1-1), lines 1 to 50
+
+Read [](file:///d%3A/work/sonrisa-news/WORKLOG.md#1-1), lines 1 to 100
+
+Read [](file:///d%3A/work/sonrisa-news/DECISIONS.md)
+
+Ran terminal command: dotnet package search Microsoft.Agents --prerelease 2>&1 | Select-Object -First 20
+
+
+
+Fetched https://learn.microsoft.com/en-us/agent-framework/overview/?pivots=programming-language-csharp
+
+
+
+Fetched https://learn.microsoft.com/en-us/agent-framework/agents/providers/openai
+
+Now I have all the context needed. Let me plan and implement Phase 5: 
+
+Created 9 todos
+
+Starting: *Install Microsoft.Agents.AI.OpenAI package* (1/9)
+
+Ran terminal command: cd d:\work\sonrisa-news\src\NewsApp; dotnet add package Microsoft.Agents.AI.OpenAI --prerelease 2>&1 | Select-Object -Last 5
+
+Starting: *Create RssItem, IRssFeedService, RssFeedService* (2/9)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/RssItem.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/IRssFeedService.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/RssFeedService.cs)
+
+Starting: *Create AgentRunState, INewsEvaluatorAgent, NewsEvaluatorAgent* (3/9)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/AgentRunState.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/INewsEvaluatorAgent.cs)
+
+Now create the real agent implementation using the Microsoft Agent Framework: 
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsEvaluatorAgent.cs)
+
+Starting: *Create INewsEvaluatorRunner, NewsEvaluatorRunner* (4/9)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/INewsEvaluatorRunner.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsEvaluatorRunner.cs)
+
+Starting: *Create NewsSchedulerService + NewsEvaluatorModule* (5/9)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsSchedulerService.cs)
+
+Created [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsEvaluatorModule.cs)
+
+Starting: *Update AppDbContext + add EF migration* (6/9)
+
+Replacing 11 lines with 13 lines in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Infrastructure/Data/AppDbContext.cs)
+
+
+```
+
+```
+Now create the EF migration for AgentRunState: 
+
+Ran terminal command: dotnet ef migrations add AddAgentRunState 2>&1
+Completed with input: dotnet ef migrations add AddAgentRunState 2>&1
+
+Ran terminal command: cd d:\work\sonrisa-news; dotnet build src/NewsApp 2>&1 | Select-String "error"
+Completed with input: cd d:\work\sonrisa-news; dotnet build src/NewsApp 2>&1 | Select-String "error"
+
+Ran terminal command: dotnet build src/NewsApp 2>&1 | Select-String "OPENAI001|AsAIAgent|AgentExtension" | Select-Object -First 10
+Completed with input: dotnet build src/NewsApp 2>&1 | Select-String "OPENAI001|AsAIAgent|AgentExtension" | Select-Object -First 10
+
+Ran terminal command: $pkg = Get-ChildItem "$env:USERPROFILE\.nuget\packages\microsoft.agents.ai.openai" -ErrorAction SilentlyContinue | Select-Object -Last 1; if ($pkg) { Get-ChildItem $pkg.FullName -Recurse -Filter "*.dll" | Select-Object Name } else { Write-Host "Not found" }
+
+Ran terminal command: Get-ChildItem "$env:USERPROFILE\.nuget\packages" -Filter "microsoft.agents*" -Directory | Select-Object Name
+Completed with input: Get-ChildItem "$env:USERPROFILE\.nuget\packages" -Filter "microsoft.agents*" -Directory | Select-Object Name
+
+Ran terminal command: $nugetCache = dotnet nuget locals global-packages --list 2>&1 | Select-String "global-packages" | ForEach-Object { ($_ -split ": ")[1].Trim() }; Get-ChildItem $nugetCache -Filter "microsoft.agents*" -Directory | Select-Object Name
+
+Ran terminal command: $nugetCache = (dotnet nuget locals global-packages --list 2>&1 | Select-String "global-packages" | ForEach-Object { ($_ -split ": ")[1].Trim() }); $pkg = Get-ChildItem "$nugetCache\microsoft.agents.ai.openai" -Directory | Sort-Object Name | Select-Object -Last 1; Get-ChildItem $pkg.FullName -Recurse -Filter "*.dll" | Select-Object Name, FullName
+
+Ran terminal command: $nugetCache = (dotnet nuget locals global-packages --list 2>&1 | Select-String "global-packages" | ForEach-Object { ($_ -split ": ")[1].Trim() }); $dll = Get-ChildItem "$nugetCache\microsoft.agents.ai.openai\1.13.0\lib\net10.0\Microsoft.Agents.AI.OpenAI.dll" -ErrorAction SilentlyContinue; if (!$dll) { $dll = Get-ChildItem "$nugetCache\microsoft.agents.ai.openai" -Recurse -Filter "*.dll" | Where-Object { $_.FullName -like "*net8*" -or $_.FullName -like "*net10*" } | Select-Object -First 1 }; Add-Type -AssemblyFile $dll.FullName; [System.AppDomain]::CurrentDomain.GetAssemblies() | Where-Object { $_.GetName().Name -eq "Microsoft.Agents.AI.OpenAI" } | ForEach-Object { $_.GetTypes() | Where-Object { $_.IsPublic } | Select-Object FullName }
+
+Ran terminal command: $nugetCache = (dotnet nuget locals global-packages --list 2>&1 | Select-String "global-packages" | ForEach-Object { ($_ -split ": ")[1].Trim() }); Get-ChildItem "$nugetCache\microsoft.agents.ai.openai" -Recurse -Filter "*.dll" | Where-Object { $_.FullName -match "net\d" } | Select-Object FullName
+
+Ran terminal command: $dll = "D:\packages\nuget\microsoft.agents.ai.openai\1.13.0\lib\net10.0\Microsoft.Agents.AI.OpenAI.dll"; $asm = [System.Reflection.Assembly]::LoadFrom($dll); $asm.GetTypes() | Where-Object IsPublic | Select-Object FullName | Sort-Object FullName
+Completed with input: $dll = "D:\packages\nuget\microsoft.agents.ai.openai\1.13.0\lib\net10.0\Microsoft.Agents.AI.OpenAI.dll"; $asm = [System.Reflection.Assembly]::LoadFrom($dll); $asm.GetTypes() | Where-Object IsPublic | Select-Object FullName | Sort-Object FullName
+
+Ran terminal command: Get-ChildItem "D:\packages\nuget\microsoft.agents.ai.openai\1.13.0" -Recurse | Where-Object { $_.Name -match "\.(cs|txt|xml)$" } | Select-Object FullName | Select-Object -First 10
+
+Ran terminal command: Get-ChildItem "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0" | Select-Object Name
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "AsAIAgent|ResponsesClient" | Select-Object -First 20
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai.openai\1.13.0\lib\net10.0\Microsoft.Agents.AI.OpenAI.xml" -Pattern "AsAIAgent|ResponsesClient|IChatClient" | Select-Object -First 20
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "RunAsync" | Select-Object -First 15
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "RunAsync.*string.*return|returns.*string" -CaseSensitive:$false | Select-Object -First 10
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "RunAsync.*string" | Select-Object -First 5; Write-Host "---"; Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -SimpleMatch "AgentRunResult" | Select-Object -First 5
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -like "*AIAgent*RunAsync*" -or $_.name -like "*ChatClientAgent*RunAsync*string*" } | Select-Object -First 5 | ForEach-Object { $_.name; $_.returns }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -like "*AIAgentExtensions*RunAsync*" } | Select-Object -First 5 | ForEach-Object { $_.name; ($_.returns.'#text' -join " ") }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -like "*RunAsync*" } | Select-Object -First 20 | ForEach-Object { $_.name }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -like "*Extension*RunAsync*" -or ($_.name -like "*RunAsync*" -and $_.name -notlike "*Chat*" -and $_.name -notlike "*Skill*") } | Select-Object -First 20 | ForEach-Object { $_.name }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -like "*AIAgent*" } | Select-Object -First 20 | ForEach-Object { $_.name }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -like "*AIAgent*RunAsync*" } | ForEach-Object { $_.name }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -like "*T:Microsoft.Agents.AI.AIAgent" } | ForEach-Object { $_.name }
+
+Run in Terminal
+
+Continue to iterate?
+[object Object]
+
+Made changes.
+
+User: @agent Continue: "Continue to iterate?"
+
+GitHub Copilot: Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -match "^T:Microsoft.Agents.AI.AIAgent$" } | ForEach-Object { $_.name; $_.summary.'#text' }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -match "AIAgent" } | Select-Object -First 5 | ForEach-Object { $_.name }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -match "^M:Microsoft.Agents.AI.AIAgent\." } | ForEach-Object { $_.name } | Select-Object -First 20
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | ForEach-Object { $_.name } | Where-Object { $_ -like "M:*RunAsync*" -and $_ -notlike "*Chat*" -and $_ -notlike "*Skill*" -and $_ -notlike "*Notify*" } | Select-Object -First 20
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $all = $xml.doc.members.member | ForEach-Object { $_.name }; Write-Host "Total members:" $all.Count; $all | Where-Object { $_ -like "*RunAsync*" } | Select-Object -First 30
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -eq "M:Microsoft.Agents.AI.ChatClientAgent.RunAsync(System.String,Microsoft.Agents.AI.AgentSession,Microsoft.Agents.AI.ChatClientAgentRunOptions,System.Threading.CancellationToken)" } | ForEach-Object { "Returns: " + ($_.returns.'#text' -join " "); "Summary: " + ($_.summary.'#text' -join " ") }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $member = $xml.doc.members.member | Where-Object { $_.name -eq "M:Microsoft.Agents.AI.ChatClientAgent.RunAsync(System.String,Microsoft.Agents.AI.AgentSession,Microsoft.Agents.AI.ChatClientAgentRunOptions,System.Threading.CancellationToken)" }; $member.returns.InnerXml
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -match "^[PM]:Microsoft.Agents.AI.AgentResponse\." -or $_.name -eq "T:Microsoft.Agents.AI.AgentResponse" } | ForEach-Object { "Name: " + $_.name; "Summary: " + ($_.summary.'#text' -join " "); "Returns: " + ($_.returns.'#text' -join " "); "" }
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -like "*AgentResponse*" } | ForEach-Object { $_.name } | Select-Object -First 20
+
+Ran terminal command: $xml = [xml](Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml"); $xml.doc.members.member | Where-Object { $_.name -match "^[PM]:Microsoft\.Agents\.AI\.AgentResponse" } | ForEach-Object { $_.name }
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -SimpleMatch "AgentResponse" | Where-Object { $_ -match "property|<P:" } | Select-Object -First 20
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "P:Microsoft.Agents.AI.AgentResponse" | Select-Object -First 10
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "<member name=""P:Microsoft\.Agents\.AI\.AgentResponse\." | Select-Object -First 10
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "AgentResponse" | Select-String -Pattern "Text|Content|ToString" | Select-Object -First 10
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "Extension.*RunAsync|RunAsync.*Extension" | Select-Object -First 10; Write-Host "---"; Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "name=""M:Microsoft.Agents.AI.*Extension.*RunAsync" | Select-Object -First 10
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "<member name=""M:.*Extensions.*\(Microsoft\.Agents\.AI\.AIAgent," | Select-Object -First 20
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -Pattern "name=""M:Microsoft.Agents.AI.AIAgent\." | Select-Object -First 20
+
+Ran terminal command: Select-String -Path "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" -SimpleMatch 'name="M:Microsoft.Agents.AI.AIAgent.' | Select-Object -First 20
+
+Ran terminal command: Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" | Select-String "AIAgent.RunAsync" | Select-Object -First 10
+
+Ran terminal command: Get-Content "D:\packages\nuget\microsoft.agents.ai.openai\1.13.0\microsoft.agents.ai.openai.nuspec" | Select-String "dependency" | Select-Object -First 20
+
+Ran terminal command: Get-Content "D:\packages\nuget\microsoft.agents.ai\1.13.0\lib\net10.0\Microsoft.Agents.AI.xml" | Select-String "T:Microsoft.Agents.AI.AgentSession" | Select-Object -First 3
+
+Now I have enough information to fix the agent. The `AsAIAgent` extension is in `OpenAI.Responses` namespace, and `RunAsync` needs `IEnumerable<ChatMessage>` from `Microsoft.Extensions.AI`: 
+
+Replacing 47 lines with 115 lines in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsEvaluatorAgent.cs)
+
+
+```
+
+```
+
+
+Ran terminal command: dotnet build src/NewsApp 2>&1 | Select-String "error|warning CS" | Select-Object -First 15
+Completed with input: dotnet build src/NewsApp 2>&1 | Select-String "error|warning CS" | Select-Object -First 15
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsEvaluatorAgent.cs#100-100), lines 100 to 175
+
+The replace left duplicate methods. Let me view the full file and fix it:  
+
+Read [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsEvaluatorAgent.cs)
+
+The file has duplicated methods. Remove the second (duplicate) copy:  
+
+Replacing 62 lines with 3 lines in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Modules/NewsEvaluator/NewsEvaluatorAgent.cs)
+
+
+```
+
+```
+
+
+Ran terminal command: dotnet build src/NewsApp 2>&1 | Select-String "error" | Select-Object -First 10
+
+Build succeeds. Now create the migration and wire everything into Program.cs:   
+
+Updated todo list
+
+Ran terminal command: cd d:\work\sonrisa-news\src\NewsApp; dotnet ef migrations add AddAgentRunState 2>&1
+
+Starting: *Wire into Program.cs* (7/9)
+
+Replacing 5 lines with 6 lines in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+
+```
+
+```
+
+
+Replacing 3 lines with 4 lines in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+
+```
+
+```
+
+
+Replacing 2 lines with 3 lines in [](file:///d%3A/work/sonrisa-news/src/NewsApp/Program.cs)
+
+
+```
+
+```
+
+
+Starting: *Create NewsSchedulerServiceTests* (8/9)
+
+Now create the integration tests. I need fake services and a test factory:  
+
+Created [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/AgentTests/NewsSchedulerServiceTests.cs)
+
+Starting: *Build and run all tests* (9/9)
+
+Ran terminal command: cd d:\work\sonrisa-news; dotnet build 2>&1 | Select-String "error" | Select-Object -First 10
+Completed with input: cd d:\work\sonrisa-news; dotnet build 2>&1 | Select-String "error" | Select-Object -First 10
+
+Replacing 8 lines with 9 lines in [](file:///d%3A/work/sonrisa-news/tests/NewsApp.Tests/AgentTests/NewsSchedulerServiceTests.cs)
+
+
+```
+
+```
+
+
+Ran terminal command: dotnet build 2>&1 | Select-String "error" | Select-Object -First 10
+
+Now run the Phase 5 tests:   
+
+Ran terminal command: dotnet test tests/NewsApp.Tests --filter "FullyQualifiedName~AgentTests" --no-build 2>&1 | Select-String "(Passed|Failed|passed|failed|Error Message)" | Select-Object -Last 20
+
+All 7 agent tests pass. Run the full suite to confirm no regressions:   
+
+Ran terminal command: dotnet test tests/NewsApp.Tests --no-build 2>&1 | Select-String "(Passed|Failed|passed|failed)" | Select-Object -Last 5
+
+Completed: *Build and run all tests* (9/9)
+
+All 34 tests pass (27 existing + 7 new). Here's what was implemented:
+
+**Phase 5 — News Evaluator AI Agent** (NewsEvaluator):
+- RssItem.cs — record with `Title, Summary, Url, PublishedAt`
+- IRssFeedService.cs + RssFeedService.cs — fetches RSS via `HttpClient` + `SyndicationFeed.Load()` from configured `NewsEvaluator:RssSources`
+- AgentRunState.cs — EF entity (single-row table, `Id=1`, tracks `LastRunAt`)
+- INewsEvaluatorAgent.cs + NewsEvaluatorAgent.cs — wraps `OpenAIClient → GetResponsesClient() → AsAIAgent()`, sends RSS batch with system prompt, parses JSON array response into `IReadOnlyList<NewsNotification>`
+- INewsEvaluatorRunner.cs + NewsEvaluatorRunner.cs — orchestrates one run: filter by `LastRunAt` → AI evaluate → enqueue → persist state
+- NewsSchedulerService.cs — `BackgroundService` timed loop using `NewsEvaluator:IntervalMinutes`
+- NewsEvaluatorModule.cs — DI registration + `POST /api/admin/agent/run` endpoint (Admin role required)
+- EF migration `AddAgentRunState` added
+
+**Test Phase 5** (NewsSchedulerServiceTests.cs) — 7 tests:
+- No `LastRunAt` → all RSS items sent to agent
+- Items older than `LastRunAt` are filtered out, only newer ones sent
+- Agent-returned notifications are enqueued to `INewsQueue`
+- `LastRunAt` is persisted to DB after run
+- All items older than `LastRunAt` → agent not called, queue stays empty
+- `/api/admin/agent/run` requires authentication (401 for unauthenticated)
+- `/api/admin/agent/run` requires Admin role (403 for regular user)
+
+Made changes.

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NewsApp.Infrastructure.Data;
 using NewsApp.Modules.Identity;
+using NewsApp.Modules.NewsEvaluator;
 using NewsApp.Modules.Notifications;
 using NewsApp.Modules.Subscriptions;
 
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Modules
 builder.Services.AddIdentityModule(builder.Configuration);
 builder.Services.AddNotificationsModule();
+builder.Services.AddNewsEvaluatorModule();
 
 // API
 builder.Services.AddAuthorization();
@@ -30,6 +32,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapIdentityEndpoints();
 app.MapSubscriptionEndpoints();
+app.MapNewsEvaluatorEndpoints();
 
 await app.SeedAdminAsync();
 
