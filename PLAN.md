@@ -46,11 +46,11 @@ Run these tests at the end of Phase 2 before starting Phase 3.
 
 1. `Subscription` entity: `Id (Guid)`, `UserId`, `Type (Email|Slack)`, `Target`, `IsActive`, `CreatedAt`
 2. EF migration `InitialCreate` (Identity + Subscription + AgentRunState tables)
-3. `SubscriptionsController` [Authorize]: full CRUD with ownership enforcement
+3. Subscriptions endpoints [Authorize]: full CRUD with ownership enforcement
 4. Admin endpoints [Authorize(Roles="Admin")]:
    - `GET /api/admin/users` — paginated
    - `GET|POST|PUT|DELETE /api/admin/users/{id}/subscriptions`
-5. Write `SubscriptionApiTests` and `AdminApiTests` for testing admin end suscription endpoints
+5. Write `SubscriptionApiTests` and `AdminApiTests` for testing new endpoints
 
 ---
 

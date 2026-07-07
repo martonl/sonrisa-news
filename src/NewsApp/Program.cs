@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NewsApp.Infrastructure.Data;
 using NewsApp.Modules.Identity;
+using NewsApp.Modules.Subscriptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapIdentityEndpoints();
+app.MapSubscriptionEndpoints();
 
 await app.SeedAdminAsync();
 

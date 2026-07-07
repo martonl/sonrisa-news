@@ -14,3 +14,8 @@ Remove Phase 7
 7. extract each record to its own file
 
 8. use c# primary constructors where possible
+
+9. implement phase 3 and Test Phase 3
+
+10. extract each record, enum to separate files
+

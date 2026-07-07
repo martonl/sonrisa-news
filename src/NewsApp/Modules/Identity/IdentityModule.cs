@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NewsApp.Infrastructure.Data;
 
@@ -110,10 +111,8 @@ public static class IdentityModule
     public static async Task SeedAdminAsync(this WebApplication app)
     {
         using var scope = app.Services.CreateScope();
-        // Ensure the schema exists. Phase 3 will replace this with database.Migrate()
-        // once the InitialCreate migration has been generated.
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        await db.Database.EnsureCreatedAsync();
+        await db.Database.MigrateAsync();
 
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
