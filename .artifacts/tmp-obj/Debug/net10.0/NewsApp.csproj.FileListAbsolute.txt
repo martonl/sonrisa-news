@@ -1,0 +1,9 @@
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\NewsApp.csproj.AssemblyReference.cache
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\rpswa.dswa.cache.json
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\NewsApp.GeneratedMSBuildEditorConfig.editorconfig
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\NewsApp.AssemblyInfoInputs.cache
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\NewsApp.AssemblyInfo.cs
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\NewsApp.csproj.CoreCompileInputs.cache
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\NewsApp.MvcApplicationPartsAssemblyInfo.cs
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\NewsApp.MvcApplicationPartsAssemblyInfo.cache
+d:\work\sonrisa-news\.artifacts\tmp-obj\Debug\net10.0\NewsApp.sourcelink.json

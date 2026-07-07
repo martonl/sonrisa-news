@@ -5,3 +5,4 @@ tests/NewsApp.Tests/obj
 .vs
 src/NewsAdmin/node_modules
 src/NewsAdmin/dist
+src/NewsApp/news.db*

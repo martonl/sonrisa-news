@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+
 using NewsApp.Infrastructure.Data;
 using NewsApp.Modules.Identity;
 using NewsApp.Modules.NewsEvaluator;
@@ -19,6 +21,10 @@ builder.Services.AddNewsEvaluatorModule();
 // API
 builder.Services.AddAuthorization();
 builder.Services.AddOpenApi();
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 var app = builder.Build();
 
@@ -27,7 +33,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapIdentityEndpoints();
